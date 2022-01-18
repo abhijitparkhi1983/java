@@ -90,7 +90,10 @@ public class Copy extends Exec {
             false);
     return new Base64InputStream(proc.getInputStream());
   }
-
+   void bar() {
+throw new NullPointerException();
+}
+  
   public void copyFileFromPod(
       String namespace, String name, String container, String srcPath, Path destination)
       throws ApiException, IOException {
