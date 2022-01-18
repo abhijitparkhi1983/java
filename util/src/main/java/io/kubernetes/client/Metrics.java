@@ -74,4 +74,19 @@ public class Metrics {
             PodMetrics.class, PodMetricsList.class, "metrics.k8s.io", "v1beta1", "pods", apiClient);
     return metricsClient.list(namespace).getObject();
   }
+  
+  public static CharsetDecoder decoder1(Charset charset) {
+        requireNonNull(charset, "charset");
+
+        Map<Charset, CharsetDecoder> map = InternalThreadLocalMap.get().charsetDecoderCache();
+        CharsetDecoder d = map.get(charset);
+        if (d != null) {
+            d.reset().onMalformedInput(CodingErrorAction.REPLACE).onUnmappableCharacter(CodingErrorAction.REPLACE);
+            return d;
+        }
+
+        d = decoder(charset, CodingErrorAction.REPLACE, CodingErrorAction.REPLACE);
+        map.put(charset, d);
+        return d;
+    }
 }
